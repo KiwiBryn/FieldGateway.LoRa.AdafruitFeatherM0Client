@@ -29,14 +29,24 @@ byte payload[PayloadSizeMaximum] = "";
 const byte SensorReadingSeperator = ',' ;
 
 // Manual serial number configuration
-const char DeviceId[] = {"AdafruitM0"};
+const char DeviceId[] = {"adafruitM0"};
 
-const int LoopSleepDelaySeconds = 10 ;
+const long LoopSleepDelaySeconds = 300 ;
+
+// Uncomment this when running attached to Arduino IDE, if powered from USB power pack or JST connected battery comment out.
+#define DEBUG
+
+#if defined(ARDUINO_SAMD_ZERO) 
+  // Required for Serial on Zero based boards
+  #define Serial SERIAL_PORT_USBVIRTUAL
+#endif
 
 void setup() {
   Serial.begin(9600);
-  //while (!Serial);
-  
+#ifdef DEBUG  
+  while (!Serial);
+#endif  
+
   Serial.println("LoRa Setup");
 
   // override the default CS, reset, and IRQ pins (optional)
@@ -125,7 +135,5 @@ void loop()
   
   Serial.println("Loop done");
 
-  delay(LoopSleepDelaySeconds * 30000l);
+  delay(LoopSleepDelaySeconds * 1000l);
 }
-
-
